@@ -1,0 +1,20 @@
+{
+  "name": "qa-sea-cypress",
+  "version": "1.0.0",
+  "description": "Automação Cypress do desafio QA SEA",
+  "scripts": {
+    "cy:open": "cypress open",
+    "test": "cypress run --spec \"cypress/e2e/formulario.cy.js,cypress/e2e/api-listagem.cy.js\"",
+    "test:defeitos": "cypress run --spec cypress/e2e/defeitos.cy.js",
+    "test:cadastros": "cypress run --spec cypress/e2e/defeitos.cy.js --env executarCadastros=true",
+    "test:api": "cypress run --spec cypress/e2e/api-listagem.cy.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "private": true,
+  "devDependencies": {
+    "cypress": "16.1.1"
+  }
+}
