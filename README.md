@@ -1,101 +1,77 @@
 # Desafio QA SEA — Cypress
 
-Primeira versão da automação baseada na exploração real de 03/10/2026.
+Autoria: Alyne Fiamoncini. Revisão: 08/10/2026.
+
 Alvo: https://analista-teste.seatecnologia.com.br/
 
-## Como executar no seu computador
+Automação de validações do formulário, integridade da listagem e comparação entre interface e API. As expectativas representam o comportamento esperado; falhas são investigadas e registradas em VALIDACAO.md.
 
-Instale Node.js LTS e abra a pasta deste projeto no VS Code. No terminal:
+## Instalação
 
-```bash
-npm install
+Pré-requisitos: Node.js e Google Chrome instalados. Ambiente das execuções registradas: Windows, Node.js 24.21.0, Cypress 16.1.1 e Chrome 154.
+
+Abra a pasta que contém package.json no VS Code e use Terminal > Novo Terminal. Instale as dependências conforme o lockfile:
+
+```sh
+npm ci
+```
+
+No PowerShell, se houver bloqueio do script npm.ps1, use npm.cmd no lugar de npm.
+
+## Execução
+
+```sh
+# Interface interativa
 npm run cy:open
+
+# Formulário e API/listagem: seis cenários
+npm test -- --browser chrome
+
+# Suíte de defeitos: um cenário habilitado e dois pendentes
+npm run test:defeitos -- --browser chrome
+
+# Apenas API/listagem
+npm run test:api -- --browser chrome
 ```
 
-No Cypress, escolha **E2E Testing**, o navegador e `formulario.cy.js`.
-Para executar sem a janela interativa:
+Na interface do Cypress, escolha E2E Testing, Chrome e o arquivo desejado. A execução local não exige Cypress Cloud.
 
-```bash
-npm test
+Comando opcional que habilita dois cenários com envio de formulários:
+
+```sh
+npm run test:cadastros -- --browser chrome
 ```
 
-Para demonstrar os defeitos sem criar cadastros:
+Esse comando pode criar até dois registros fictícios por execução. Não há limpeza automática: não foi confirmado um fluxo seguro de exclusão. Execute apenas no ambiente do desafio. Os dois cenários têm asserções parciais, descritas abaixo, e não foram executados no reteste final.
 
-```bash
-npm run test:defeitos
-```
+## Cobertura e resultados
 
-Para executar também os dois testes que enviam formulários:
+| Arquivo | Cobertura | Último resultado comprovado |
+| --- | --- | --- |
+| formulario.cy.js | Nome obrigatório, alternância de EPI, CPF curto | 07/10: 3 aprovados |
+| api-listagem.cy.js | Nome na API, contador/nomes, filtro/limpeza | 07/10: 3 falhas; duas interrompidas por exceção da aplicação |
+| defeitos.cy.js | Tipo do botão de atividade; dois cenários de envio opcionais | 07/10–08/10: 1 falha e 2 pendentes |
 
-```bash
-npm run test:cadastros
-```
+São duas execuções distintas: seis cenários na suíte padrão e três na suíte de defeitos. Total consolidado: 3 aprovados, 4 falhas e 2 pendentes. A falha inicial de carregamento por Cypress.env() foi corrigida e não entra nessa contagem.
 
-Esse último comando pode criar até dois funcionários fictícios por execução
-enquanto os bugs estiverem presentes. Não há limpeza automática: não foi
-confirmado um fluxo seguro de exclusão. Use no ambiente do desafio.
+## Decisões e limites
 
-## Cenários e interpretação
+- cy.request consulta a API diretamente; cy.intercept observa a resposta usada pela tela, sem substituí-la.
+- Quantidades são calculadas com os dados retornados, pois o ambiente é compartilhado e mutável.
+- O teste de integridade aponta registros sem nome. Na comparação por nome, esses registros são registrados no log e excluídos; isso não resolve a inconsistência e não transforma o teste de integridade em aprovação.
+- Nomes duplicados limitam a comparação: ela não garante correspondência individual por ID. Inativos com nome igual ao de um ativo são excluídos da verificação negativa.
+- A configuração não suprime exceções da aplicação. A falha em contador/filtro não comprova divergência de contagem nem conclusão das verificações.
+- O botão de atividade é verificado pela propriedade DOM type. Encontrar submit não comprova, sozinho, cadastro ou fechamento.
+- Os dois cenários opcionais verificam permanência do formulário; não confirmam ausência de persistência pela API, mensagem específica de CPF ou criação de uma segunda atividade. O uso de vários dados inválidos também limita o isolamento da causa.
+- Seletores dependem dos textos e nomes dos campos; a seleção do checkbox presume um único checkbox no formulário.
+- Não há cobertura automatizada completa de edição, anexos, segurança, exclusão, duplicidade ou nascimento futuro.
 
-| Cenário | Expectativa |
-| --- | --- |
-| Nome vazio | Envio bloqueado e foco no nome |
-| Não usa EPI | Campos de EPI somem e reaparecem ao desmarcar |
-| CPF curto | Validação de comprimento bloqueia envio |
-| Tipo do botão de atividade | Deve ser button; observado submit, portanto falha esperada |
-| CPF 11111111111 | Deve rejeitar; cadastro aceito na exploração |
-| Adicionar outra atividade | Deve manter formulário; salvou e fechou na exploração |
+## Documentação
 
-Os testes de defeitos afirmam o comportamento esperado e podem ficar vermelhos.
-Não alteramos as expectativas para esconder problemas. CPF inválido é diferente
-de CPF curto: 11 caracteres não garantem dígitos verificadores válidos.
-Os dois casos com cadastro ficam pendentes por padrão (it.skip).
-Os seletores input[name=...] foram inspecionados no formulário real.
-Checkbox único é uma dependência desta versão; revisar se a tela mudar.
+- VALIDACAO.md: execuções e interpretação.
+- RELATORIO_REVISAO.md: achados prioritários, evidências e limites.
+- PLANO_E_ESTRATEGIA.md: premissas, prioridades e próximos testes.
+- DIARIO_IA.md: uso de IA e correções.
+- RETESTE_04OUT.md: histórico de 04/10, não representa o estado atual.
 
-## O que explicar na apresentação
-
-- `describe`: reúne cenários da mesma funcionalidade.
-- `beforeEach`: abre a página e o formulário antes de cada cenário.
-- `cy.get`: localiza um elemento por seletor.
-- `cy.contains`: localiza pelo texto exibido.
-- `type`, `click`, `check`: simulam ações da pessoa usuária.
-- `should` e `expect`: verificam o resultado esperado.
-- Não usamos pausas fixas. Cypress repete as verificações até o timeout.
-- Não escondemos erros de JavaScript com uncaught:exception.
-
-## Limites desta versão
-
-Não cobre ainda edição, anexos, API, segurança, duplicidade isolada ou
-persistência de nascimento futuro. A exploração aceitou envio com data futura,
-mas a data gravada ainda precisa ser confirmada. As regras de negócio devem
-ser confrontadas com o desafio antes da entrega final.
-Veja VALIDACAO.md para o estado real de execução deste projeto.
-
-## Atualização de 04/10 — execução no Windows
-
-A suíte padrão agora inclui formulário e API/listagem (6 testes).
-
-1. Extraia este pacote em uma NOVA pasta.
-2. No VS Code, abra a pasta que contém package.json.
-3. Abra Terminal > Novo terminal.
-4. Execute `npm ci` e aguarde.
-5. Execute `npx cypress open`, escolha E2E Testing e Chrome.
-6. Execute formulario.cy.js e api-listagem.cy.js, um por vez.
-7. Para executar os seis pelo terminal: `npm test -- --browser chrome`.
-
-`test:defeitos` fica separado: verifica expectativa que pode falhar no sistema atual.
-`test:cadastros` pode criar dados de teste; execute apenas se quiser reproduzir esses defeitos.
-Não grave no Cypress Cloud: a execução local já atende a este projeto.
-
-### O que você deve entender
-- describe agrupa cenários; it define um cenário.
-- cy.visit abre a tela; cy.get localiza campo; click clica.
-- should/expect comparam resultado observado com esperado.
-- cy.request consulta a API diretamente.
-- cy.intercept observa a consulta feita pela tela, sem substituir a resposta.
-- cy.wait aguarda essa consulta.
-- Os números não são fixados em 7: os testes calculam a partir da resposta atual.
-- Teste que falha precisa ser investigado: pode ser defeito, automação ou ambiente.
-
-Leia RETESTE_04OUT.md para resultados manuais e limitações. Sintaxe validada; execução atualizada ainda pendente no Windows.
+O documento original do desafio deve ser consultado para confirmar regras de negócio. As premissas não substituem requisitos explícitos.

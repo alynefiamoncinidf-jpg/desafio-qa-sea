@@ -1,68 +1,50 @@
-# Estado de validação — atualizado em 06/10/2026
+# Estado de validação — revisão de 08/10/2026
 
-## Ambiente de execução
+Horários e datas referem-se ao horário de Brasília. Execuções realizadas no Windows da candidata, com Node.js 24.21.0, Cypress 16.1.1 e Chrome 154 em modo headless. Alvo: https://analista-teste.seatecnologia.com.br/.
 
-Testes executados no computador da candidata, em Windows,
-com Cypress e navegador Chrome, contra o sistema:
-https://analista-teste.seatecnologia.com.br/
+## Execução padrão — 07/10, saída recebida às 23h36
 
-## Resultados registrados
+Comando: npm.cmd test -- --browser chrome.
 
-### formulario.cy.js — 05/10/2026
+| Cenário | Resultado | Interpretação |
+| --- | --- | --- |
+| Nome obrigatório vazio | Aprovado | Bloqueio e foco no campo |
+| Alternância da opção de EPI | Aprovado | Campos ocultados e restaurados |
+| CPF com menos de 11 caracteres | Aprovado | Bloqueio de comprimento; não valida dígitos verificadores |
+| GET /employees com nomes preenchidos | Falha | HTTP 200 e array; IDs sem nome: 5ad7, 6d9e, ca3f, 8f00 |
+| Contador e nomes na interface | Falha | Exceção da aplicação: Cannot read properties of undefined (reading 'employee'); comparação não concluída |
+| Filtro de ativos e limpeza | Falha | Mesma exceção da aplicação; verificações não concluídas |
 
-Resultado: 3 testes aprovados, sem falhas.
+Resultado do comando: 6 cenários, 3 aprovados e 3 falhas. O Cypress gerou três screenshots de falha. A saída original enviada pela candidata está em evidencias/execucao_padrao_07OUT.txt.
 
-- Bloqueio do salvamento com nome obrigatório vazio.
-- Ocultação e restauração dos campos de EPI ao alternar a opção.
-- Bloqueio de CPF com menos de 11 caracteres.
+## Suíte de defeitos — 07/10–08/10, resultado recebido às 00h02
 
-Esses resultados correspondem à execução daquela data.
-Não representam aprovação de todas as validações do formulário.
+Comando: npm.cmd run test:defeitos -- --browser chrome.
 
-### api-listagem.cy.js — 06/10/2026
+Resultado: 0 aprovados, 1 falha e 2 pendentes.
 
-Resultado da execução após a correção: 3 testes com falha.
+- Botão Adicionar outra atividade: esperado type=button, observado type=submit; falhou após timeout de 15 segundos.
+- CPF inválido e fechamento por atividade: pendentes por it.skip, pois executarCadastros não foi habilitado. Não foram exercitados nessa execução.
+- Um screenshot de falha foi gerado no computador da candidata; ainda não incluído neste pacote.
 
-1. Nome preenchido:
-   A consulta GET /employees respondeu HTTP 200 e retornou
-   46 registros. O teste identificou 4 registros sem nome
-   preenchido no caminho state.employee.name.
+Antes desse reteste, a suíte falhou ao carregar porque Cypress.env() foi removido no Cypress 16. A leitura foi corrigida para Cypress.expose('executarCadastros') === true e o comando opcional foi migrado para --expose. Essa falha de automação é anterior à execução dos cenários e não entra no total consolidado.
 
-2. Comparação do contador e dos nomes com a tela:
-   Inicialmente, o próprio teste falhou ao acessar employee
-   em um registro sem state. O acesso foi corrigido para
-   r.state?.employee?.isActive === true.
-   Na nova execução, o teste calculou 43 ativos entre 46 registros,
-   mas foi interrompido por uma exceção da aplicação:
-   Cannot read properties of undefined (reading 'employee').
-   A comparação com a tela não foi concluída.
+## Total consolidado de duas execuções
 
-3. Filtro de ativos:
-   Foi registrada uma exceção da aplicação após clicar em
-   "Ver apenas ativos", também relacionada ao acesso a employee.
-   A verificação do filtro e da limpeza não foi concluída.
+9 cenários: 3 aprovados, 4 falhas e 2 pendentes. Duas das falhas representam interrupção por exceção da aplicação antes da conclusão das asserções de comparação. Não há aprovação integral do sistema.
 
-As exceções da aplicação foram mantidas visíveis nos testes.
+## Consulta manual à API e acesso — 07/10
 
-### defeitos.cy.js
+O JSON enviado às 22h48 contém 47 registros, 43 com isActive estritamente true. A quantidade corresponde a essa amostra e não deve ser fixada em testes futuros.
 
-Execução ainda não confirmada por evidência.
-Não contabilizado como aprovado ou reprovado.
+Há dois registros sem state (ca3f, 8f00) e dois com employee sem nome (5ad7, 6d9e). Esses dados são compatíveis com o tipo de exceção observado; a causa completa da tela vazia não foi isolada.
 
-## Bloqueios e limitações
+A listagem abriu na janela anônima. Nos dois prints complementares de Request Headers não aparecem Authorization nem Cookie. Um print anterior documenta GET /employees com HTTP 200 e Content-Type application/json, em outra captura. Não se presume que todas as capturas sejam do mesmo pedido.
 
-- Em 06/10/2026, por volta das 19h02, foi observado erro HTTP 502
-  no acesso manual ao sistema, impedindo a confirmação manual
-  do comportamento encontrado na automação.
-- A captura recebida dessa tentativa mostra apenas o endereço;
-  falta uma captura que também mostre a mensagem 502.
-- O ambiente possui dados compartilhados e mutáveis.
-  Quantidades e registros podem mudar entre execuções.
-- Consultar dados inconsistentes não comprova como foram criados.
-- Não houve aprovação integral da suíte nem do sistema.
+## Validação desta revisão de arquivos
 
-## Pendências
+O pacote mantém as asserções das execuções recebidas. Alterações adicionais: comentário --expose, comando opcional em package.json, formatação de API e documentação. Sintaxe dos arquivos JavaScript e JSON conferida localmente. Isso não equivale a uma nova execução E2E; não foi feita outra execução no ambiente do assistente.
 
-- Confirmar manualmente o impacto da exceção quando o site voltar.
-- Executar a suíte defeitos.cy.js e registrar o resultado.
-- Organizar as evidências e atualizar a documentação no GitHub.
+## Limitações
+
+Ambiente compartilhado; dados podem mudar. Não se sabe como todos os registros foram criados. Não houve teste final dos cenários que criam cadastros nem cobertura completa de segurança, anexos ou edição. O erro 502 foi relatado em tentativas anteriores, mas não explica por si só as exceções registradas nas execuções atuais.

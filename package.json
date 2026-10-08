@@ -6,7 +6,7 @@
     "cy:open": "cypress open",
     "test": "cypress run --spec \"cypress/e2e/formulario.cy.js,cypress/e2e/api-listagem.cy.js\"",
     "test:defeitos": "cypress run --spec cypress/e2e/defeitos.cy.js",
-    "test:cadastros": "cypress run --spec cypress/e2e/defeitos.cy.js --env executarCadastros=true",
+    "test:cadastros": "cypress run --spec cypress/e2e/defeitos.cy.js --expose executarCadastros=true",
     "test:api": "cypress run --spec cypress/e2e/api-listagem.cy.js"
   },
   "keywords": [],
