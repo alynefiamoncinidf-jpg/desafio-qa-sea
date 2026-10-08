@@ -1,7 +1,6 @@
 // Esta suíte verifica comportamentos esperados. Bugs atuais podem causar falhas.
-// Os casos que enviam formulários só rodam com --env executarCadastros=true.
-const testeComCadastro = Cypress.env('executarCadastros') ? it : it.skip;
-
+// Os casos que enviam formulários só rodam com --expose executarCadastros=true.
+const testeComCadastro = Cypress.expose('executarCadastros') === true ? it : it.skip;
 function preencherFuncionario(cpf, nascimento = '1990-01-01') {
   const nome = `QA AUTO ${Date.now()} ${Cypress._.random(1000, 9999)}`;
   cy.get('input[name="name"]').type(nome);

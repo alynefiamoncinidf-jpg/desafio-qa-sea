@@ -46,7 +46,8 @@ describe('API e comparação com a listagem', () => {
 
       const registros = response.body;
       const ativos = registros.filter(
-r => r.state?.employee?.isActive === true      ).length;
+        r => r.state?.employee?.isActive === true
+      ).length;
 
       cy.contains(
         new RegExp(`Ativos\\s*${ativos}\\s*/\\s*${registros.length}`)
