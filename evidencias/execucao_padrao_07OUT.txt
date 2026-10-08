@@ -1,0 +1,173 @@
+PS C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-
+cypress> npm.cmd -- --browser chrome
+Unknown command: "--browser"
+
+To see a list of supported npm commands, run:
+  npm help
+PS C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-sea-cypress> npm.cmd test -- --browser chrome
+
+> qa-sea-cypress@1.0.0 test
+> cypress run --spec "cypress/e2e/formulario.cy.js,cypress/e2e/api-listagem.cy.js" --browser chrome
+
+
+
+====================================================================================================
+
+  (Run Starting)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Cypress:        16.1.1                                                                         │
+  │ Browser:        Chrome 154 (headless)                                                          │
+  │ Node Version:   v24.21.0 (C:\Program Files\nodejs\node.exe)                                    │
+  │ Specs:          2 found (formulario.cy.js, api-listagem.cy.js)                                 │
+  │ Searched:       C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-sea-cypress\cypress\e2e\for │
+  │                 mulario.cy.js, C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-sea-cypress\ │
+  │                 cypress\e2e\api-listagem.cy.js                                                 │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  formulario.cy.js                                                                (1 of 2)
+
+
+  Cadastro de funcionário — funcionamento básico
+    √ bloqueia o envio quando o nome está vazio (1276ms)
+    √ oculta os campos de EPI e os restaura ao desmarcar a opção (767ms)
+    √ bloqueia CPF com menos de 11 caracteres antes do envio (974ms)
+
+
+  3 passing (3s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        3                                                                                │
+  │ Passing:      3                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     3 seconds                                                                        │
+  │ Spec Ran:     formulario.cy.js                                                                 │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  api-listagem.cy.js                                                              (2 of 2)
+
+
+  API e comparação com a listagem
+    1) GET employees retorna funcionários com nome preenchido
+    2) compara o contador e os nomes disponíveis com a tela
+    3) filtra ativos e restaura os nomes disponíveis ao limpar
+
+
+  0 passing (2s)
+  3 failing
+
+  1) API e comparação com a listagem
+       GET employees retorna funcionários com nome preenchido:
+     AssertionError: IDs de funcionários sem nome: 5ad7, 6d9e, ca3f, 8f00: expected [ '5ad7', '6d9e', 'ca3f', '8f00' ] to be empty
+      at Object.proxyGetter [as get] (https://analista-teste.seatecnologia.com.br/__cypress/runner/cypress_runner.js:81320:22)
+      at Context.eval (webpack://qa-sea-cypress/./cypress/e2e/api-listagem.cy.js:35:14)
+      at getRet (https://analista-teste.seatecnologia.com.br/__cypress/runner/cypress_runner.js:120751:20)
+
+  2) API e comparação com a listagem
+       compara o contador e os nomes disponíveis com a tela:
+     TypeError: The following error originated from your application code, not from Cypress.
+
+  > Cannot read properties of undefined (reading 'employee')
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+https://on.cypress.io/uncaught-exception-from-application
+      at <unknown> (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:248:14212)
+      at Array.filter (<anonymous>)
+      at S_ (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:248:14194)
+      at wh (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:38:19518)
+      at Af (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:3139)
+      at A1 (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:44734)
+      at M1 (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:39724)
+      at Xx (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:39652)
+      at mu (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:39506)
+      at Uf (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:35874)
+
+  3) API e comparação com a listagem
+       filtra ativos e restaura os nomes disponíveis ao limpar:
+     TypeError: The following error originated from your application code, not from Cypress.
+
+  > Cannot read properties of undefined (reading 'employee')
+
+When Cypress detects uncaught errors originating from your application it will automatically fail the current test.
+
+This behavior is configurable, and you can choose to turn this off by listening to the `uncaught:exception` event.
+
+https://on.cypress.io/uncaught-exception-from-application
+      at <unknown> (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:248:14212)
+      at Array.filter (<anonymous>)
+      at S_ (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:248:14194)
+      at wh (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:38:19518)
+      at Af (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:3139)
+      at A1 (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:44734)
+      at M1 (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:39724)
+      at Xx (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:39652)
+      at mu (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:39506)
+      at Uf (https://analista-teste.seatecnologia.com.br/assets/index-44cc5754.js:40:35874)
+
+
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        3                                                                                │
+  │ Passing:      0                                                                                │
+  │ Failing:      3                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  3                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     1 second                                                                         │
+  │ Spec Ran:     api-listagem.cy.js                                                               │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  (Screenshots)
+
+  -  C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-sea-cypress\cypress\screensho     (1258x566)
+     ts\api-listagem.cy.js\API e comparação com a listagem -- GET employees retorna f               
+     uncionários com nome preenchido (failed).png                                                   
+  -  C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-sea-cypress\cypress\screensho     (1258x566)
+     ts\api-listagem.cy.js\API e comparação com a listagem -- compara o contador e os               
+      nomes disponíveis com a tela (failed).png                                                     
+  -  C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-sea-cypress\cypress\screensho     (1258x566)
+     ts\api-listagem.cy.js\API e comparação com a listagem -- filtra ativos e restaur               
+     a os nomes disponíveis ao limpar (failed).png                                                  
+
+
+====================================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ √  formulario.cy.js                         00:03        3        3        -        -        - │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ×  api-listagem.cy.js                       00:01        3        -        3        -        - │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ×  1 of 2 failed (50%)                      00:05        6        3        3        -        -  
+
+PS C:\Users\Alyne\Downloads\QA_SEA_Cypress_Reteste\qa-s
+ea-cypress> 
+
+
+
+
+
